@@ -23,7 +23,7 @@ export default async function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-lg font-semibold">Dashboard</h1>
         <EmergencyStopControl engaged={Boolean(health.emergency_stop)} />
       </div>
@@ -50,10 +50,10 @@ export default async function Dashboard() {
             {alerts.map((a) => (
               <div
                 key={String(a.id)}
-                className="flex items-start justify-between gap-4 rounded border border-slate-200 p-3"
+                className="flex flex-wrap items-start justify-between gap-3 rounded border border-slate-200 p-3"
               >
-                <div>
-                  <div className="flex items-center gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge value={String(a.severity)} />
                     <span className="text-sm font-medium">{String(a.title)}</span>
                     <span className="text-xs text-slate-500">{relativeTime(String(a.created_at))}</span>

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
 import './globals.css';
 import { getSession } from '@/lib/auth';
@@ -8,6 +8,13 @@ import { signOutAction } from '@/lib/actions/system';
 export const metadata: Metadata = {
   title: 'Campaign Console',
   description: 'Approve, schedule and monitor email campaigns sent through Microsoft Graph.',
+};
+
+// Phones are a first-class way to check on a running campaign, so the console
+// is laid out to fit one without anything being clipped off the side.
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export const dynamic = 'force-dynamic';
@@ -62,21 +69,28 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
         {session && (
           <header className="border-b border-slate-200 bg-white">
-            <div className="mx-auto flex max-w-7xl items-center gap-6 px-4 py-3">
-              <span className="font-semibold text-slate-900">Campaign Console</span>
-              <nav className="flex flex-1 gap-1">
-                {NAV.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="rounded px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+            {/* One wrapping row. On a phone the navigation drops to its own
+                full-width line and wraps rather than scrolling, so every
+                section stays visible instead of running off the edge. */}
+            <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 md:gap-x-4">
+              <span className="shrink-0 text-sm font-semibold text-slate-900 md:text-base">
+                Campaign Console
+              </span>
+              <nav className="order-last w-full md:order-none md:w-auto md:flex-1">
+                <div className="flex flex-wrap gap-1">
+                  {NAV.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="shrink-0 whitespace-nowrap rounded px-2.5 py-1.5 text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900 md:px-3"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
               </nav>
               <span
-                className={`rounded border px-2 py-0.5 text-xs font-medium ${
+                className={`ml-auto shrink-0 rounded border px-2 py-0.5 text-xs font-medium md:ml-0 ${
                   controls?.production_mode
                     ? 'border-red-200 bg-red-50 text-red-800'
                     : 'border-slate-200 bg-slate-50 text-slate-600'
@@ -89,10 +103,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               >
                 {controls?.production_mode ? 'PRODUCTION' : 'TEST MODE'}
               </span>
-              <span className="text-xs text-slate-500">
+              {/* Identity is the first thing to give up room for: below md it
+                  would push the sign-out control off the edge. */}
+              <span
+                className="hidden max-w-[16rem] truncate text-xs text-slate-500 md:inline"
+                title={`${session.email} · ${session.role}`}
+              >
                 {session.email} · {session.role}
               </span>
-              <form action={signOutAction}>
+              <form action={signOutAction} className="shrink-0">
                 <button className="text-xs text-slate-500 underline hover:text-slate-800">
                   Sign out
                 </button>
