@@ -12,10 +12,20 @@
   --color-ok: #15803d;
 }
 
+/* Stop iOS Safari inflating text in landscape, which reflows the console into
+   a layout that no longer fits the screen. */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   background: var(--color-canvas);
   color: var(--color-ink);
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Email addresses, campaign ids and mailbox names have no spaces to break
+     at. Without this a single long one widens the page on a phone and pushes
+     everything else off the side. */
+  overflow-wrap: break-word;
 }
 
 /* A banner the operator cannot miss when sending is globally halted. */

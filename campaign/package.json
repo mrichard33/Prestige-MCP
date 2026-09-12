@@ -12,7 +12,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "npm run build:packages",
+    "build": "npm run build:packages && npm run build:web",
     "typecheck": "tsc -b packages/core packages/graph packages/testing apps/worker --pretty",
     "lint": "eslint . --max-warnings=0",
     "format": "prettier --write .",

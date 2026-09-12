@@ -13,7 +13,7 @@ export function Card({
   return (
     <section className={`rounded-lg border ${border} bg-white shadow-sm`}>
       {(title || actions) && (
-        <div className="flex items-center justify-between gap-4 border-b border-slate-200 px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-slate-200 px-4 py-3">
           {title && <h2 className="text-sm font-semibold text-slate-800">{title}</h2>}
           {actions && <div className="flex items-center gap-2">{actions}</div>}
         </div>
